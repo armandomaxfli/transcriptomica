@@ -1,0 +1,17 @@
+#!/bin/bash
+
+#SBATCH -p cicese
+#SBATCH --job-name=transdecoder
+#SBATCH -o transdecoder.%N.%j.out
+#SBATCH -e transdecoder.%N.%j.err
+#SBATCH -N 1
+#SBATCH -n 24
+#SBATCH --mem=50GB
+
+#Ruta a Transdecoder
+TRANSDECODER=/LUSTRE/apps/bioinformatica/TransDecoder-v5.7.0
+secuencia=ruta/de/la/secuencia
+
+#análisis
+
+$TRANSDECODER/TransDecoder.LongOrfs -t $secuencia/secuencia.fasta

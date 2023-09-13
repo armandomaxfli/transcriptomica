@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# Directivas de slurm
+#SBATCH -p d30           # se selecciona la cola "d30" para la ejecucion
+#SBATCH -t 15-00:00:00    # tiempo maximo de corrida 15 dias
+#SBATCH --job-name=Trinity  # Nombre asignado al trabajo  
+#SBATCH -o trinity.%N.%j.out  # Archivo de salida estandard (logs)
+#SBATCH -e trinity.%N.%j.err  # Archivo de salida (errores)
+#SBATCH -N 1           # Numero de nodos solicitados
+#SBATCH -n 24          # Se reservan los 24 nucleos del nodo (num de tareas internas)
+#SBATCH --mem=100GB      # Memoria solicita al nodo
+
+# Se carga el ambiente para la ejecucion de trinity v2.15.1
+module load trinityrnaseq-v2.15.1
+
+#mis variables
+PH="/LUSTRE/bioinformatica_data/genomica_funcional/Armando/Amphidinium/trimmomatic"
+R1=${PH}/A20_clean-2408_1P.fq.gz
+R2="$PH/A20_clean-2408_2P.fq.gz"
+OUTDIR="/LUSTRE/bioinformatica_data/genomica_funcional/Armando/Amphidinium/trinity_ensamble"
+#
+Trinity --no_version_check --seqType fq --max_memory 80G \
+--CPU 12 --left $R1 --right $R2 \
+--output $OUTDIR 
+
+# see the time spent
+START=`date +%s`
+
+
+END=`date +%
+
+RUNTIME=$(($END-$START))
+
+echo "run time -> $RUNTIME"

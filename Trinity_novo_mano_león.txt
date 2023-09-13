@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# Directivas
+#SBATCH --job-name=Trinity-denovo # nombre del trabajo que aparecera$
+#SBATCH --output=slurm-%j.log # salida estandar num de trabajo
+#SBATCH --error=slurm-%j.err # salida estandar de error
+#SBATCH --nodes 2 # número de nodos
+#SBATCH --mem=100GB # RAM 1GB por cada millon de reads
+#SBATCH --ntasks-per-node=24 # número de tareas por nodo
+#SBATCH -t 6-00:00:00 # número maximo
+#SBATCH -p cicese #cola
+
+
+#export some soft
+export PATH=$PATH:/LUSTRE/apps/bioinformatica/bowtie2/bin/
+export PATH=$PATH:/LUSTRE/apps/bioinformatica/samtools-1.17/bin/
+export PATH=$PATH:/LUSTRE/apps/bioinformatica/jellyfish-2.3.0/
+export PATH=$PATH:/LUSTRE/apps/bioinformatica/salmon/bin/
+module load conda-2023
+module load trinityrnaseq-v2.15.1
+
+#my vars
+
+PH=`pwd`
+R1="$PH/R1.fastq.gz"
+R2="$PH/R2.fastq.gz"
+OUTDIR="Trinity_ensamble"
+LIBT="RF"
+Trinity --no_version_check --seqType fq --max_memory 100G \
+--no_bowtie \
+--CPU 24 --left $R1 --right $R2 \
+--normalize_reads \
+--output $OUTDIR
+#--full_cleanup"
+
+# see the time spent
+START=`date +%s`
+
+# Run trinity
+###$TRINITY  $PARM
+
+END=`date +%s`
+
+RUNTIME=$(($END-$START))
+
+echo "run time -> $RUNTIME"

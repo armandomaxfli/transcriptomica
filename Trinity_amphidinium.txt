@@ -1,0 +1,22 @@
+#mis variables
+
+PH="/LUSTRE/bioinformatica_data/genomica_funcional/Armando/Amphidinium/trimmomatic
+R1="$PH/A20_clean-2408_1P.fq.gz"
+R2="$PH/A20_clean-2408_2P.fq.gz"
+OUTDIR="/LUSTRE/bioinformatica_data/genomica_funcional/Armando/Amphidinium/ensamble"
+
+Trinity --no_version_check --seqType fq --max_memory  \
+--CPU  --left $R1 --right $R2 \
+--output $OUTDIR
+
+# see the time spent
+START=`date +%s`
+
+# Run trinity
+###$TRINITY  $PARM
+
+END=`date +%s`
+
+RUNTIME=$(($END-$START))
+
+echo "run time -> $RUNTIME"

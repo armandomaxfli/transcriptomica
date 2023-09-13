@@ -1,0 +1,31 @@
+#!/bin/bash
+
+#SBATCH -p cicese # selecciona la cola cicese
+#SBATCH --job-name=transrate
+#SBATCH -o transrate.%N.%j.out
+#SBATCH -e transrate.%N.%j.err
+#SBATCH -N 1
+#SBATCH --mem=50GB
+#SBATCH -n 24
+#SBATCH -t 06-00:00:00
+
+#mis variable 
+
+TRANSRATE=/LUSTRE/apps/bioinformatica/transrate/bin
+ENSAMBLE="/LUSTRE/bioinformatica_data/genomica_funcional/Armando/Amphidinium/ensamble/ensamble_A20.fasta"
+R1="/LUSTRE/bioinformatica_data/genomica_funcional/Armando/Amphidinium/trimmomatic/A20_clean-2408_1P.fq.gz"
+R2="/LUSTRE/bioinformatica_data/genomica_funcional/Armando/Amphidinium/trimmomatic/A20_clean-2408_2P.fq.gz"
+
+#para que corra transare se necesita de ruby2
+
+export PATH=/LUSTRE/apps/bioinformatica/.local/bin:$PATH
+export PATH=/LUSTRE/apps/bioinformatica/ruby2/ruby-2.2.0/bin:$PATH
+export LD_LIBRARY_PATH=/LUSTRE/apps/bioinformatica/ruby2/ruby-2.2.0/lib:$LD_LIBRARY_PATH
+
+#instrucciones para hacer el análisis de transarte
+
+$TRANSRATE/transrate --assembly $ENSAMBLE \
+--left $R1 \
+--right $R2 \
+--threads 8 \
+--output gcontigs_A20
